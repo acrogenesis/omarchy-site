@@ -336,23 +336,20 @@ html.wte-home .main { margin: 0; }
 
 
 /* fastfetch window — the omarchy icon in block art beside boxed system info. */
-.ff { display: grid; gap: var(--space-large) var(--space-x-large); justify-content: center; align-items: center; }
+.ff { display: grid; gap: var(--space-large) var(--space-x-large); justify-content: center; align-items: start; }
 
 @media (min-width: 72em) {
-  /* Big icon on the left, the two info boxes side by side on the right, so the
-     info is short and wide and the icon defines the banner height. */
-  .ff { grid-template-columns: auto minmax(30em, 50em); }
+  /* Icon left, info right. The icon is sized by JS (home.js) to match the info
+     column's height, so it spans the stacked boxes like real fastfetch. */
+  .ff { grid-template-columns: auto minmax(22em, 34em); }
 }
 
 .ff__boxes { display: grid; gap: var(--win-gap); }
-@media (min-width: 44em) {
-  .ff__boxes { grid-template-columns: 1fr 1fr; }
-}
 
 .ff__icon {
-  align-self: center;
+  align-self: start;
   color: var(--color-green);
-  font-size: clamp(0.5rem, 2vw, 1.05rem);
+  font-size: clamp(0.4rem, 1vw, 0.62rem);
   letter-spacing: 0;
   line-height: 0.92;
   margin: 0;

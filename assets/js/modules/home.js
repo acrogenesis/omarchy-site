@@ -238,12 +238,51 @@ function startWorkspaces(launcherInput) {
 }
 
 
+/* ----------------------------------------------------- fastfetch icon fit -- */
+
+// Real fastfetch sizes the logo to the height of the info column beside it.
+// The icon is a fixed-cell <pre>, so we scale its font-size until its rendered
+// height matches the info block — but only when they sit side by side (wide
+// screens); stacked, the icon keeps its own modest size.
+function startFastfetchFit() {
+  const icon = document.querySelector('.ff__icon');
+  const info = document.querySelector('.ff__info');
+  if (icon == null || info == null) return;
+
+  const sideBySide = window.matchMedia('(min-width: 72em)');
+
+  const fit = () => {
+    if (!sideBySide.matches) { icon.style.fontSize = ''; return; }
+    icon.style.fontSize = '';
+    const baseFs = parseFloat(getComputedStyle(icon).fontSize);
+    const baseH = icon.offsetHeight;
+    const target = info.offsetHeight;
+    if (baseFs > 0 && baseH > 0 && target > 0) {
+      const scaled = baseFs * (target / baseH);
+      // never smaller than the base, and cap the growth so a tall info can't
+      // blow the icon out past the banner.
+      icon.style.fontSize = `${Math.max(baseFs, Math.min(scaled, baseFs * 3.2))}px`;
+    }
+  };
+
+  fit();
+  if (document.fonts?.ready != null) document.fonts.ready.then(fit);
+
+  let frame = 0;
+  window.addEventListener('resize', () => {
+    if (frame !== 0) return;
+    frame = requestAnimationFrame(() => { frame = 0; fit(); });
+  });
+}
+
+
 function ready() {
   if (!document.documentElement.classList.contains('wte-home')) return;
   startClock();
   startVibe();
   const launcherInput = startLauncher();
   startWorkspaces(launcherInput);
+  startFastfetchFit();
 }
 
 export { ready };
