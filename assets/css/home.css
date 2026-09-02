@@ -336,21 +336,25 @@ html.wte-home .main { margin: 0; }
 
 
 /* fastfetch window — the omarchy icon in block art beside boxed system info. */
-.ff { display: grid; gap: var(--space-large) var(--space-x-large); justify-content: center; }
+.ff { display: grid; gap: var(--space-large) var(--space-x-large); justify-content: center; align-items: center; }
 
-@media (min-width: 60em) {
-  .ff {
-    grid-template-columns: auto minmax(18em, 34em);
-    align-items: start;
-  }
+@media (min-width: 72em) {
+  /* Big icon on the left, the two info boxes side by side on the right, so the
+     info is short and wide and the icon defines the banner height. */
+  .ff { grid-template-columns: auto minmax(30em, 50em); }
+}
+
+.ff__boxes { display: grid; gap: var(--win-gap); }
+@media (min-width: 44em) {
+  .ff__boxes { grid-template-columns: 1fr 1fr; }
 }
 
 .ff__icon {
-  align-self: start;
+  align-self: center;
   color: var(--color-green);
-  font-size: clamp(0.42rem, 1.9vw, 0.95rem);
+  font-size: clamp(0.5rem, 2vw, 1.05rem);
   letter-spacing: 0;
-  line-height: 1;
+  line-height: 0.92;
   margin: 0;
   white-space: pre;
 }
