@@ -346,7 +346,7 @@ html.wte-home .main { margin: 0; }
 .ff__icon {
   align-self: start;
   color: var(--color-green);
-  font-size: clamp(0.16rem, 0.62vw, 0.32rem);
+  font-size: clamp(0.32rem, 1.25vw, 0.66rem);
   letter-spacing: 0;
   line-height: 1;
   margin: 0;
