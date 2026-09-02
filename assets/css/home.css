@@ -290,11 +290,10 @@ html.wte-home .main { margin: 0; }
 }
 
 @media (min-width: 60em) {
-  .tiles {
-    grid-template-columns: 1.5fr 1fr;
-    grid-template-rows: auto auto;
-  }
-  .tiles__main { grid-column: 1; grid-row: 1 / span 2; }
+  .tiles { grid-template-columns: 1fr 1fr; }
+  /* The fastfetch banner spans the full width so its height comes from the
+     icon, not from the video/themes column next to it. */
+  .tiles__main { grid-column: 1 / -1; }
 }
 
 
@@ -337,16 +336,19 @@ html.wte-home .main { margin: 0; }
 
 
 /* fastfetch window — the omarchy icon in block art beside boxed system info. */
-.ff { display: grid; gap: var(--space-large); align-items: start; }
+.ff { display: grid; gap: var(--space-large) var(--space-x-large); justify-content: center; }
 
-@media (min-width: 40em) {
-  .ff { grid-template-columns: auto 1fr; }
+@media (min-width: 60em) {
+  .ff {
+    grid-template-columns: auto minmax(18em, 34em);
+    align-items: start;
+  }
 }
 
 .ff__icon {
   align-self: start;
   color: var(--color-green);
-  font-size: clamp(0.32rem, 1.25vw, 0.66rem);
+  font-size: clamp(0.42rem, 1.9vw, 0.95rem);
   letter-spacing: 0;
   line-height: 1;
   margin: 0;
