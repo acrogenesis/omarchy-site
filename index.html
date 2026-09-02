@@ -48,7 +48,7 @@
           <span>omarchy</span>
         </a>
         <a class="bar__ws" data-ws="ws-home" href="#ws-home"><small>1</small> session</a>
-        <a class="bar__ws bar__ws--extra" data-ws="ws-apps" href="#ws-apps"><small>2</small> launch</a>
+        <a class="bar__ws bar__ws--extra" data-ws="ws-apps" href="#ws-apps"><small>2</small> menu</a>
         <a class="bar__ws bar__ws--extra" data-ws="ws-watch" href="#ws-watch"><small>3</small> watch</a>
       </div>
 
@@ -71,11 +71,17 @@
             <button class="thememenu__item" type="button" role="menuitemradio" data-theme="nord" aria-pressed="false"><span class="thememenu__dot"></span>Nord</button>
             <button class="thememenu__item" type="button" role="menuitemradio" data-theme="rose-pine" aria-pressed="false"><span class="thememenu__dot"></span>Rosé Pine</button>
             <button class="thememenu__item thememenu__item--surprise" type="button" role="menuitem" data-theme="surprise"><span class="thememenu__dot" style="background: var(--color-turquoise)"></span>Surprise me</button>
+            <p class="thememenu__hint">Style ▸ Theme &nbsp;·&nbsp; Super + Ctrl + Shift + Space</p>
           </div>
         </div>
-        <span class="bar__mod bar__mod--extra" aria-label="System load">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="1.5"/><path d="M4 10h3M4 14h3M17 10h3M17 14h3M10 4v3M14 4v3M10 17v3M14 17v3"/></svg>
-          <canvas class="bar__spark" data-spark width="54" height="19" aria-hidden="true"></canvas>
+        <a class="bar__mod bar__mod--extra bar__mod--accent" href="/omarchy-site/manual/ai/" aria-label="Agents">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="8" width="16" height="11" rx="2.5"/><path d="M12 4v4M8.5 13v1.5M15.5 13v1.5"/></svg>
+          <span>agents</span>
+        </a>
+        <span class="bar__mod bar__mod--extra bar__tray" aria-label="Network, audio, battery">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 8.5a15 15 0 0 1 19 0M5.5 11.7a10.5 10.5 0 0 1 13 0M8.5 14.9a6 6 0 0 1 7 0"/><circle cx="12" cy="18.5" r="1"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="8" width="16" height="8" rx="2"/><path d="M21 11v2"/><rect x="4.5" y="10" width="9" height="4" rx="0.5" fill="currentColor" stroke="none"/></svg>
         </span>
         <span class="bar__mod bar__clock" aria-label="Clock">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
@@ -115,13 +121,14 @@
                   <p class="neofetch__id"><b>omarchy</b><span class="at">@</span>quattro</p>
                   <hr class="neofetch__rule">
                   <dl class="neofetch__list">
-                    <div class="neofetch__row"><dt>OS</dt><dd>Omarchy · Arch, btw</dd></div>
-                    <div class="neofetch__row"><dt>WM</dt><dd>Hyprland · tiling</dd></div>
-                    <div class="neofetch__row"><dt>Shell</dt><dd>Omarchy Quattro</dd></div>
+                    <div class="neofetch__row"><dt>OS</dt><dd>Omarchy · Arch Linux</dd></div>
+                    <div class="neofetch__row"><dt>Edition</dt><dd>Quattro</dd></div>
+                    <div class="neofetch__row"><dt>WM</dt><dd>Hyprland · dwindle</dd></div>
+                    <div class="neofetch__row"><dt>Shell</dt><dd>Omarchy · Quickshell</dd></div>
+                    <div class="neofetch__row"><dt>Terminal</dt><dd>Foot</dd></div>
+                    <div class="neofetch__row"><dt>Editor</dt><dd>Neovim</dd></div>
+                    <div class="neofetch__row"><dt>Agents</dt><dd>claude · codex · opencode…</dd></div>
                     <div class="neofetch__row"><dt>Theme</dt><dd data-theme-name>Tokyo Night</dd></div>
-                    <div class="neofetch__row"><dt>Agent</dt><dd>Claude Code · ready</dd></div>
-                    <div class="neofetch__row"><dt>Author</dt><dd>DHH · 37signals</dd></div>
-                    <div class="neofetch__row"><dt>Vibe</dt><dd>malleable ∞</dd></div>
                   </dl>
                   <div class="neofetch__pills" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
                   <p class="neofetch__lede">Beautiful, fun &amp; agentic Linux for the age of agents. Vibe your way through every alteration, tweak, and desire, then <a href="https://omarchs.fyi">be the Omarch</a> and command your agent.</p>
@@ -155,12 +162,12 @@
 
           <article class="win">
             <div class="win__bar">
-              <span class="win__title"><b>omarchy-theme</b> — set</span>
+              <span class="win__title"><b>omarchy theme</b> set</span>
               <span class="win__tag">live</span>
             </div>
             <div class="win__body">
               <div class="themes-app">
-                <p class="themes-app__now">current vibe → <b data-theme-name>Tokyo Night</b></p>
+                <p class="themes-app__now">current theme → <b data-theme-name>Tokyo Night</b> <span class="themes-app__count">· 6 of 22 built in</span></p>
                 <div class="vibe">
                   <button class="vibe__chip" type="button" data-theme="tokyo-night" aria-pressed="false"><span class="vibe__dot"></span>Tokyo Night</button>
                   <button class="vibe__chip" type="button" data-theme="gruvbox" aria-pressed="false"><span class="vibe__dot"></span>Gruvbox</button>
@@ -176,10 +183,10 @@
         </section>
 
         <section class="workspace" id="ws-apps" aria-label="Launcher">
-          <h2 class="workspace__head">2 · Launch <span>Super + Space — pick a destination</span></h2>
+          <h2 class="workspace__head">2 · Menu <span>Super + Space — everything Omarchy</span></h2>
           <article class="win">
             <div class="win__bar">
-              <span class="win__title"><b>launcher</b> — application menu</span>
+              <span class="win__title"><b>omarchy</b> menu</span>
               <span class="win__tag">super + space</span>
             </div>
             <div class="launcher">

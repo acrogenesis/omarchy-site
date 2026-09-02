@@ -1,8 +1,8 @@
-// Homepage desktop behaviour. The page is dressed as a Hyprland session, so
-// this wires the parts a real session would have: a live clock, a moving
-// Waybar sparkline, workspace focus that tracks scrolling, a launcher you can
-// actually type in, and a theme switch that repaints everything by rewriting
-// the eight --rgb-* channels root.css derives every colour from.
+// Homepage behaviour for the Omarchy-session desktop: a live clock in the
+// Omarchy bar, workspace focus that tracks scrolling, the Omarchy-menu search,
+// and a theme switch that repaints everything by rewriting the eight --rgb-*
+// channels root.css derives every colour from — the same way an Omarchy theme
+// swap recolours the whole shell.
 
 const STORAGE_KEY = 'omarchy-vibe';
 
@@ -67,55 +67,6 @@ function startClock() {
 }
 
 
-/* -------------------------------------------------------------- sparkline -- */
-
-function startSparkline() {
-  const canvas = document.querySelector('[data-spark]');
-  if (!(canvas instanceof HTMLCanvasElement)) return;
-  const ctx = canvas.getContext('2d');
-  if (ctx == null) return;
-
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
-  const cssW = canvas.clientWidth || 54;
-  const cssH = canvas.clientHeight || 19;
-  canvas.width = Math.round(cssW * dpr);
-  canvas.height = Math.round(cssH * dpr);
-  ctx.scale(dpr, dpr);
-
-  const N = 28;
-  const data = Array.from({ length: N }, () => 0.3 + Math.random() * 0.4);
-
-  const accent = () =>
-    getComputedStyle(document.documentElement).getPropertyValue('--color-terminal-cyan').trim() || '#7dcfff';
-
-  const draw = () => {
-    ctx.clearRect(0, 0, cssW, cssH);
-    ctx.beginPath();
-    for (let i = 0; i < N; i += 1) {
-      const x = (i / (N - 1)) * cssW;
-      const y = cssH - data[i] * (cssH - 2) - 1;
-      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-    }
-    ctx.strokeStyle = accent();
-    ctx.lineWidth = 1.25;
-    ctx.lineJoin = 'round';
-    ctx.stroke();
-  };
-
-  draw();
-  if (prefersReducedMotion()) return;
-
-  window.setInterval(() => {
-    data.shift();
-    const prev = data[data.length - 1];
-    let next = prev + (Math.random() - 0.5) * 0.4;
-    next = Math.max(0.12, Math.min(0.95, next));
-    data.push(next);
-    draw();
-  }, 900);
-}
-
-
 /* ------------------------------------------------------------ theme swap -- */
 
 function applyTheme(name) {
@@ -135,7 +86,7 @@ function applyTheme(name) {
 const CONTROL_SELECTOR = '.vibe__chip[data-theme], .thememenu__item[data-theme]';
 
 function startVibe() {
-  // Every place a theme can be picked — the tile chips and the Waybar menu —
+  // Every place a theme can be picked — the tile chips and the bar menu —
   // is one flat list of controls that all reflect the same current choice.
   const controls = [...document.querySelectorAll(CONTROL_SELECTOR)];
 
@@ -157,7 +108,7 @@ function startVibe() {
   applyTheme(current);
   reflect(current);
 
-  // The Waybar dropdown, if present.
+  // The Omarchy-bar theme dropdown, if present.
   const menu = document.querySelector('[data-theme-menu]');
   const toggle = menu?.querySelector('.bar__theme');
   const pop = menu?.querySelector('.thememenu__pop');
@@ -290,7 +241,6 @@ function startWorkspaces(launcherInput) {
 function ready() {
   if (!document.documentElement.classList.contains('wte-home')) return;
   startClock();
-  startSparkline();
   startVibe();
   const launcherInput = startLauncher();
   startWorkspaces(launcherInput);

@@ -1,7 +1,7 @@
 /* ============================================================================
    Omarchy homepage — a live Hyprland session.
 
-   Omarchy *is* a tiling desktop, so the homepage is dressed as one: a Waybar
+   Omarchy *is* a tiling desktop, so the homepage is dressed as one: the Omarchy bar (its Quickshell shell)
    across the top, and every region a gapped, rounded, focus-aware window with
    a Hyprland-style gradient active border. Nothing here leaks past the
    homepage — it's all scoped under html.wte-home or the .desk* / .win* / .bar*
@@ -33,7 +33,7 @@ html.wte-home .main { margin: 0; }
 }
 
 
-/* ----------------------------------------------------------------- Waybar -- */
+/* --------------------------------------------------- Omarchy bar (shell) -- */
 
 .bar {
   align-items: center;
@@ -120,7 +120,10 @@ html.wte-home .main { margin: 0; }
 .bar__mod--accent { color: var(--vibe-accent, var(--color-green)); }
 .bar__mod b { color: var(--color-white); font-weight: 700; }
 
-.bar__spark { display: block; height: 1.2em; width: 3.4em; }
+/* Status tray glyphs — network, audio, battery, as the real Omarchy bar shows
+   them on the right. Icon-only, non-interactive stand-ins. */
+.bar__tray { color: var(--color-terminal-cyan); }
+.bar__tray svg { height: 1.05em; width: 1.05em; }
 
 /* Theme menu — Omarchy's own theme switch, dropped onto the bar. */
 .thememenu { position: relative; }
@@ -181,6 +184,15 @@ html.wte-home .main { margin: 0; }
   content: "✓";
   margin-left: auto;
 }
+.thememenu__hint {
+  border-top: var(--border-width) solid rgba(var(--rgb-terminal-black), 0.5);
+  color: rgba(var(--rgb-terminal-white), 0.45);
+  font-size: var(--font-size-small);
+  margin: 0.3em 0 0;
+  padding: 0.6em 0.75em 0.2em;
+}
+
+.themes-app__count { color: rgba(var(--rgb-terminal-white), 0.45); }
 
 .bar__clock b { font-variant-numeric: tabular-nums; }
 
