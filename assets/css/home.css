@@ -290,10 +290,16 @@ html.wte-home .main { margin: 0; }
 }
 
 @media (min-width: 60em) {
-  .tiles { grid-template-columns: 1fr 1fr; }
-  /* The fastfetch banner spans the full width so its height comes from the
-     icon, not from the video/themes column next to it. */
-  .tiles__main { grid-column: 1 / -1; }
+  .tiles {
+    grid-template-columns: 1.5fr 1fr;
+    grid-template-rows: auto auto;
+  }
+  .tiles__main { grid-column: 1; grid-row: 1 / span 2; }
+}
+
+/* Fill the (row-spanning) fastfetch window and centre its content. */
+@media (min-width: 60em) {
+  .tiles__main .win__body { flex: 1; display: grid; align-content: center; }
 }
 
 
@@ -336,12 +342,12 @@ html.wte-home .main { margin: 0; }
 
 
 /* fastfetch window — the omarchy icon in block art beside boxed system info. */
-.ff { display: grid; gap: var(--space-large) var(--space-x-large); justify-content: center; align-items: start; }
+.ff { display: grid; gap: var(--space-large); justify-content: center; align-items: center; }
 
-@media (min-width: 72em) {
-  /* Icon left, info right. The icon is sized by JS (home.js) to match the info
-     column's height, so it spans the stacked boxes like real fastfetch. */
-  .ff { grid-template-columns: auto minmax(22em, 34em); }
+@media (min-width: 60em) {
+  /* Icon left, stacked info right, inside the left tile. home.js scales the
+     icon to the largest that fits this column, matching real fastfetch. */
+  .ff { grid-template-columns: auto minmax(15em, 26em); }
 }
 
 .ff__boxes { display: grid; gap: var(--win-gap); }

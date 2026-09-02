@@ -249,19 +249,26 @@ function startFastfetchFit() {
   const info = document.querySelector('.ff__info');
   if (icon == null || info == null) return;
 
-  const sideBySide = window.matchMedia('(min-width: 72em)');
+  const sideBySide = window.matchMedia('(min-width: 60em)');
 
   const fit = () => {
     if (!sideBySide.matches) { icon.style.fontSize = ''; return; }
     icon.style.fontSize = '';
+    const ff = icon.closest('.ff');
     const baseFs = parseFloat(getComputedStyle(icon).fontSize);
     const baseH = icon.offsetHeight;
-    const target = info.offsetHeight;
-    if (baseFs > 0 && baseH > 0 && target > 0) {
-      const scaled = baseFs * (target / baseH);
-      // never smaller than the base, and cap the growth so a tall info can't
-      // blow the icon out past the banner.
-      icon.style.fontSize = `${Math.max(baseFs, Math.min(scaled, baseFs * 3.2))}px`;
+    const baseW = icon.offsetWidth;
+    const gap = parseFloat(getComputedStyle(ff).columnGap) || 0;
+    const availW = ff.clientWidth - info.offsetWidth - gap;
+    const targetH = info.offsetHeight;
+    if (baseFs > 0 && baseH > 0 && baseW > 0 && availW > 0 && targetH > 0) {
+      // As large as fits: bounded by the info's height and the free width in
+      // this column, whichever is tighter.
+      const byHeight = baseFs * (targetH / baseH);
+      const byWidth = baseFs * (availW / baseW);
+      let fs = Math.min(byHeight, byWidth, baseFs * 3.2);
+      fs = Math.max(fs, baseFs * 0.5); // don't shrink into illegibility
+      icon.style.fontSize = `${fs}px`;
     }
   };
 
