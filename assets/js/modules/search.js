@@ -1,7 +1,7 @@
 // Client-side search over the manual. The index is built by bin/build-manual —
 // one entry per heading — and fetched the first time someone reaches for the box.
 
-const INDEX_URL = '/manual/search-index.json';
+const INDEX_URL = '/omarchy-site/manual/search-index.json';
 const MAX_RESULTS = 8;
 const PREVIEW_LENGTH = 160;
 

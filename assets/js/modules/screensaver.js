@@ -6,7 +6,7 @@ import init, { Session, effect_catalog } from '../wte/ttfx.js';
 import { FONT_FAMILY, FONT_SIZE, paintFrame } from '../wte/paint.js';
 import { createEffectPicker } from './screensaver-picker.js';
 
-const WTE_WASM_URL = '/assets/js/wte/ttfx.wasm';
+const WTE_WASM_URL = '/omarchy-site/assets/js/wte/ttfx.wasm';
 const FRAME_RATE = 120;
 const FRAME_MS = 1000 / FRAME_RATE;
 const MAX_CATCH_UP_MS = FRAME_MS * 4;

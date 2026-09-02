@@ -44,4 +44,21 @@
 
   --transition: 0.15s cubic-bezier(0.33, 1, 0.68, 1);
 
+  /* Editorial / zine layer. Everything above stays the switch surface every
+     page already shares; a live theme swap only rewrites the --rgb-* triples,
+     so these ride along without special-casing. */
+  --font-size-display: clamp(2rem, 8vw, 6rem);
+  --font-size-x-large: 300%;
+  --letter-spacing-display: -0.03em;
+  --letter-spacing-label: 0.28em;
+  --letter-spacing-wide: 0.12em;
+
+  --rule-double: var(--border-width) double var(--border-color);
+  --sticker-radius: 0.4em;
+  --sticker-tilt: -1.4deg;
+
+  --marquee-duration: 30s;
+
+  --transition-bounce: 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+
 }

@@ -5,8 +5,12 @@
 }
 
 .header h1 {
+  color: var(--color-terminal-white);
   font-size: var(--font-size-medium);
+  font-weight: 700;
+  letter-spacing: var(--letter-spacing-wide);
   text-align: center;
+  text-wrap: balance;
 }
 
 .header__subtext {

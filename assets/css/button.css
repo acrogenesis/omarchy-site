@@ -23,7 +23,9 @@
   text-transform: uppercase;
   transition:
     background var(--transition),
-    color var(--transition)
+    color var(--transition),
+    transform var(--transition-bounce),
+    box-shadow var(--transition)
   ;
 }
 
@@ -45,6 +47,15 @@
   .button:hover {
     background: var(--color-turquoise);
     color: var(--color-background-night);
+    transform: translateY(-0.22em) rotate(var(--sticker-tilt));
+    box-shadow:
+      0 1px 0 0 rgba(var(--rgb-black), 0.1),
+      0 0.5em 1.6em -0.4em rgba(var(--rgb-black), 0.35),
+      0 0.9em 2.4em -0.8em rgba(var(--rgb-black), 0.4);
+  }
+
+  .button:active {
+    transform: translateY(-0.05em) rotate(0deg);
   }
 
 }

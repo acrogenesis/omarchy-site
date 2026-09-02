@@ -1,0 +1,572 @@
+/* ============================================================================
+   Omarchy homepage — a live Hyprland session.
+
+   Omarchy *is* a tiling desktop, so the homepage is dressed as one: a Waybar
+   across the top, and every region a gapped, rounded, focus-aware window with
+   a Hyprland-style gradient active border. Nothing here leaks past the
+   homepage — it's all scoped under html.wte-home or the .desk* / .win* / .bar*
+   namespaces, so the shared components keep serving every other page as-is.
+   The eight --rgb-* channels in root.css stay the single theme surface, so the
+   vibe switcher recolors the whole desktop, borders and bar and all.
+   ============================================================================ */
+
+html.wte-home body {
+  background: var(--color-background-night);
+  overflow-x: hidden;
+}
+
+/* The shared masthead + main margins are tuned for centered document pages;
+   the desktop owns its own rhythm. */
+html.wte-home .main { margin: 0; }
+
+:root {
+  --win-bg: rgb(var(--rgb-background-storm));
+  --win-radius: 0.7em;
+  --win-gap: clamp(0.6em, 1.4vw, 1em);
+  --bar-h: 2.9em;
+  --active-border: linear-gradient(
+    120deg,
+    rgb(var(--rgb-green)),
+    rgb(var(--rgb-turquoise)),
+    rgb(var(--rgb-terminal-blue))
+  );
+}
+
+
+/* ----------------------------------------------------------------- Waybar -- */
+
+.bar {
+  align-items: center;
+  backdrop-filter: blur(0.7em);
+  -webkit-backdrop-filter: blur(0.7em);
+  background: rgba(var(--rgb-background-night), 0.72);
+  border-bottom: var(--border-width) solid var(--border-color);
+  display: flex;
+  gap: var(--win-gap);
+  justify-content: space-between;
+  min-height: var(--bar-h);
+  padding: 0.35em max(var(--win-gap), env(safe-area-inset-left));
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.bar__group {
+  align-items: center;
+  display: flex;
+  gap: 0.5em;
+  min-width: 0;
+}
+
+.bar__group--center { flex: 1; justify-content: center; }
+.bar__group--right { justify-content: flex-end; }
+
+.bar__brand {
+  align-items: center;
+  color: var(--color-green);
+  display: flex;
+  font-weight: 700;
+  gap: 0.6ch;
+  letter-spacing: var(--letter-spacing-wide);
+  text-decoration: none;
+  text-transform: lowercase;
+}
+
+.bar__brand svg { height: 1.15em; width: 1.15em; }
+.bar__brand:hover { color: var(--color-turquoise); }
+
+/* Workspace pills — the site's real navigation, dressed as WM workspaces. */
+.bar__ws {
+  align-items: center;
+  color: rgba(var(--rgb-terminal-white), 0.55);
+  cursor: pointer;
+  display: inline-flex;
+  font-weight: 500;
+  gap: 0.6ch;
+  padding: 0.3em 0.7em;
+  border-radius: 0.4em;
+  text-decoration: none;
+  transition: background var(--transition), color var(--transition);
+}
+
+.bar__ws small {
+  color: rgba(var(--rgb-terminal-white), 0.4);
+  font-size: 0.85em;
+}
+
+.bar__ws:hover { color: var(--color-white); background: rgba(var(--rgb-terminal-black), 0.4); }
+.bar__ws.is-active { color: var(--color-background-night); background: var(--color-green); }
+.bar__ws.is-active small { color: rgba(var(--rgb-background-night), 0.6); }
+
+.bar__mods {
+  align-items: center;
+  display: flex;
+  gap: 0.4em;
+}
+
+.bar__mod {
+  align-items: center;
+  background: rgba(var(--rgb-terminal-black), 0.35);
+  border-radius: 0.4em;
+  color: var(--color-terminal-white);
+  display: inline-flex;
+  font-size: var(--font-size-small);
+  gap: 0.6ch;
+  padding: 0.35em 0.7em;
+  white-space: nowrap;
+}
+
+.bar__mod svg { height: 1.05em; width: 1.05em; color: var(--color-terminal-cyan); }
+.bar__mod--accent { color: var(--vibe-accent, var(--color-green)); }
+.bar__mod b { color: var(--color-white); font-weight: 700; }
+
+.bar__spark { display: block; height: 1.2em; width: 3.4em; }
+
+/* Theme menu — Omarchy's own theme switch, dropped onto the bar. */
+.thememenu { position: relative; }
+.bar__theme {
+  border: none;
+  cursor: pointer;
+  font: inherit;
+}
+.bar__theme-caret {
+  color: rgba(var(--rgb-terminal-white), 0.5);
+  transition: transform var(--transition);
+}
+.bar__theme[aria-expanded="true"] .bar__theme-caret { transform: rotate(180deg); }
+
+.thememenu__pop {
+  background: var(--color-background-storm);
+  border: var(--border-width) solid var(--border-color);
+  border-radius: 0.6em;
+  box-shadow: 0 1em 2.4em rgba(var(--rgb-black), 0.55);
+  display: grid;
+  gap: 0.1em;
+  min-width: 13em;
+  padding: 0.4em;
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.5em);
+  z-index: 60;
+}
+.thememenu__pop[hidden] { display: none; }
+
+.thememenu__item {
+  align-items: center;
+  background: none;
+  border: none;
+  border-radius: 0.45em;
+  color: var(--color-terminal-white);
+  cursor: pointer;
+  display: flex;
+  font: inherit;
+  gap: 0.9ch;
+  letter-spacing: var(--letter-spacing-wide);
+  padding: 0.55em 0.75em;
+  text-align: left;
+  width: 100%;
+  transition: background var(--transition), color var(--transition);
+}
+.thememenu__dot {
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgba(var(--rgb-black), 0.35);
+  flex: none;
+  height: 0.9em;
+  width: 0.9em;
+}
+.thememenu__item:hover { background: rgba(var(--rgb-terminal-black), 0.5); color: var(--color-white); }
+.thememenu__item[aria-pressed="true"] { color: var(--vibe-accent, var(--color-green)); }
+.thememenu__item[aria-pressed="true"]::after {
+  color: var(--vibe-accent, var(--color-green));
+  content: "✓";
+  margin-left: auto;
+}
+
+.bar__clock b { font-variant-numeric: tabular-nums; }
+
+/* On phones the workspace list and the spare modules fold away; the brand,
+   clock and theme name are enough. */
+.bar__ws--extra,
+.bar__mod--extra { display: none; }
+
+@media (min-width: 48em) {
+  .bar__ws--extra { display: inline-flex; }
+  .bar__mod--extra { display: inline-flex; }
+}
+
+
+/* ----------------------------------------------------------------- Desktop -- */
+
+.desk {
+  display: grid;
+  gap: var(--win-gap);
+  margin-inline: auto;
+  padding: var(--win-gap) max(var(--win-gap), env(safe-area-inset-left)) calc(var(--win-gap) * 2);
+  width: min(100%, 96em);
+}
+
+
+/* -------------------------------------------------------------- Window base -- */
+
+.win {
+  background:
+    linear-gradient(var(--win-bg), var(--win-bg)) padding-box,
+    linear-gradient(var(--border-color), var(--border-color)) border-box;
+  border: 1.5px solid transparent;
+  border-radius: var(--win-radius);
+  box-shadow:
+    0 0.2em 1.2em -0.6em rgba(var(--rgb-black), 0.5),
+    0 1em 3em -1.4em rgba(var(--rgb-black), 0.7);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  transition: background var(--transition), box-shadow var(--transition), transform var(--transition-bounce);
+}
+
+@media (hover: hover) {
+  .win:hover,
+  .win:focus-within {
+    background:
+      linear-gradient(var(--win-bg), var(--win-bg)) padding-box,
+      var(--active-border) border-box;
+    box-shadow:
+      0 0.3em 1.4em -0.6em rgba(var(--rgb-black), 0.5),
+      0 1.4em 3.4em -1.4em rgba(var(--rgb-black), 0.75);
+  }
+}
+
+.win__bar {
+  align-items: center;
+  background: rgba(var(--rgb-background-night), 0.5);
+  border-bottom: var(--border-width) solid rgba(var(--rgb-terminal-black), 0.6);
+  color: rgba(var(--rgb-terminal-white), 0.7);
+  display: flex;
+  font-size: var(--font-size-small);
+  gap: 0.8ch;
+  padding: 0.55em 0.9em;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* A tiling window has no titlebar buttons — the bar is a label, not chrome.
+   A small prompt caret marks it as the terminal it is. */
+.win__title { align-items: center; color: rgba(var(--rgb-terminal-white), 0.7); display: inline-flex; gap: 0.8ch; }
+.win__title::before {
+  color: var(--color-green);
+  content: "❯";
+  font-weight: 700;
+}
+.win__title b { color: var(--color-terminal-white); font-weight: 500; }
+.win__tag {
+  color: rgba(var(--rgb-terminal-white), 0.4);
+  margin-left: auto;
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+.win__body { padding: var(--space-large); }
+.win__body--flush { padding: 0; }
+
+
+/* -------------------------------------------------------------------- Hero -- */
+
+.tiles {
+  display: grid;
+  gap: var(--win-gap);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 60em) {
+  .tiles {
+    grid-template-columns: 1.5fr 1fr;
+    grid-template-rows: auto auto;
+  }
+  .tiles__main { grid-column: 1; grid-row: 1 / span 2; }
+}
+
+/* neofetch window — the ASCII mark next to a system-info readout. */
+.neofetch { display: grid; gap: var(--space-large); }
+
+@media (min-width: 34em) {
+  .neofetch { grid-template-columns: auto 1fr; align-items: center; }
+}
+
+/* neofetch logo — the real .pre laser-etch mark. pre.css + logo.js own its
+   reveal and the WebGL canvas overlay; these rules only cancel the full-page
+   masthead margins and shrink the art to sit inside the terminal window. */
+.neofetch .pre { display: block; margin: 0; padding: 0; }
+.neofetch .pre a { justify-self: start; }
+.neofetch .pre pre {
+  font-size: clamp(0.3rem, 1.05vw, 0.62rem);
+  letter-spacing: -0.04em;
+  line-height: 1.06;
+}
+
+.neofetch__info { display: grid; gap: 0.25em; align-content: center; }
+
+.neofetch__id {
+  color: var(--color-terminal-white);
+  font-weight: 700;
+  margin-bottom: 0.35em;
+}
+.neofetch__id b { color: var(--color-green); }
+.neofetch__id .at { color: rgba(var(--rgb-terminal-white), 0.4); }
+.neofetch__rule {
+  border: none;
+  border-top: var(--border-width) solid rgba(var(--rgb-terminal-black), 0.7);
+  margin: 0 0 0.5em;
+}
+
+.neofetch__list { display: grid; gap: 0.25em; }
+.neofetch__lede {
+  color: rgba(var(--rgb-terminal-white), 0.78);
+  margin-top: var(--space-medium);
+  max-width: 42em;
+  text-wrap: pretty;
+}
+.neofetch__lede a { color: var(--color-terminal-cyan); }
+.neofetch__row { display: flex; gap: 1ch; }
+.neofetch__row dt {
+  color: var(--color-terminal-cyan);
+  flex: none;
+  font-weight: 700;
+  width: 6.5em;
+}
+.neofetch__row dd { color: var(--color-terminal-white); margin: 0; }
+
+.neofetch__pills { display: flex; gap: 0.4ch; margin-top: 0.7em; flex-wrap: wrap; }
+.neofetch__pills i {
+  border-radius: 0.25em;
+  height: 1.1em;
+  width: 1.6em;
+}
+.neofetch__pills i:nth-child(1) { background: rgb(var(--rgb-terminal-black)); }
+.neofetch__pills i:nth-child(2) { background: rgb(var(--rgb-terminal-blue)); }
+.neofetch__pills i:nth-child(3) { background: rgb(var(--rgb-green)); }
+.neofetch__pills i:nth-child(4) { background: rgb(var(--rgb-terminal-cyan)); }
+.neofetch__pills i:nth-child(5) { background: rgb(var(--rgb-turquoise)); }
+.neofetch__pills i:nth-child(6) { background: rgb(var(--rgb-terminal-white)); }
+
+.neofetch__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7em;
+  margin-top: var(--space-neutral);
+}
+
+
+/* --------------------------------------------------------------- Prompt CTA -- */
+
+.prompt {
+  align-items: center;
+  color: var(--color-terminal-white);
+  display: flex;
+  gap: 1ch;
+  flex-wrap: wrap;
+}
+.prompt__sign { color: var(--color-green); font-weight: 700; }
+.prompt__you { color: var(--color-terminal-cyan); }
+.prompt__cmd b { color: var(--color-white); font-weight: 700; }
+.prompt__caret {
+  background: var(--color-turquoise);
+  display: inline-block;
+  height: 1.1em;
+  width: 0.55ch;
+  translate: 0 0.18em;
+  animation: caret 1.1s steps(1) infinite;
+}
+@keyframes caret { 50% { opacity: 0; } }
+
+
+/* -------------------------------------------------------- Video tile / grid -- */
+
+.tile-video { position: relative; aspect-ratio: 16 / 9; }
+.tile-video .video__facade { border-radius: 0; height: 100%; }
+.tile-video .video__facade img { height: 100%; }
+
+.videos {
+  display: grid;
+  gap: var(--win-gap);
+  grid-template-columns: 1fr;
+  padding: var(--space-large);
+}
+@media (min-width: 40em) { .videos { grid-template-columns: 1fr 1fr; } }
+
+.videos .video__facade { border-radius: 0.4em; }
+.videos figure { display: grid; gap: 0.5em; margin: 0; }
+.videos figcaption {
+  color: rgba(var(--rgb-terminal-white), 0.75);
+  font-size: var(--font-size-small);
+}
+.videos figcaption b { color: var(--color-terminal-white); font-weight: 500; }
+
+
+/* ------------------------------------------------------------- Themes tile -- */
+
+.themes-app { display: grid; gap: var(--space-medium); }
+.themes-app__now {
+  align-items: baseline;
+  color: rgba(var(--rgb-terminal-white), 0.55);
+  display: flex;
+  gap: 1ch;
+  font-size: var(--font-size-small);
+}
+.themes-app__now b { color: var(--vibe-accent, var(--color-green)); font-weight: 700; }
+
+.vibe { display: flex; flex-wrap: wrap; gap: 0.6em; }
+
+.vibe__chip {
+  align-items: center;
+  background: rgba(var(--rgb-background-night), 0.55);
+  border: var(--border-width) solid var(--border-color);
+  border-radius: 2em;
+  color: var(--color-terminal-white);
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  font-size: var(--font-size-small);
+  font-weight: 500;
+  gap: 0.7ch;
+  letter-spacing: var(--letter-spacing-wide);
+  padding: 0.4em 0.9em;
+  transition: transform var(--transition-bounce), border-color var(--transition), color var(--transition), background var(--transition);
+}
+.vibe__dot {
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(var(--rgb-black), 0.35) inset;
+  height: 0.85em;
+  width: 0.85em;
+}
+.vibe__chip[aria-pressed="true"] {
+  border-color: var(--vibe-accent, var(--color-green));
+  color: var(--color-white);
+  background: rgba(var(--rgb-terminal-black), 0.4);
+}
+@media (hover: hover) {
+  .vibe__chip:hover {
+    transform: translateY(-0.15em) rotate(var(--sticker-tilt));
+    border-color: var(--vibe-accent, var(--color-turquoise));
+    color: var(--color-white);
+  }
+}
+
+
+/* ----------------------------------------------------------------- Launcher -- */
+
+.launcher { display: grid; }
+.launcher__search {
+  align-items: center;
+  border-bottom: var(--border-width) solid rgba(var(--rgb-terminal-black), 0.6);
+  color: var(--color-terminal-white);
+  display: flex;
+  gap: 1ch;
+  padding: 0.9em var(--space-large);
+}
+.launcher__sign { color: var(--color-green); font-weight: 700; }
+.launcher__input {
+  background: none;
+  border: none;
+  color: var(--color-terminal-white);
+  flex: 1;
+  font: inherit;
+  min-width: 0;
+  outline: none;
+}
+.launcher__input::placeholder { color: rgba(var(--rgb-terminal-white), 0.4); }
+.launcher__count {
+  color: rgba(var(--rgb-terminal-white), 0.4);
+  font-size: var(--font-size-small);
+}
+
+.launcher__grid {
+  display: grid;
+  gap: 0.4em;
+  grid-template-columns: repeat(auto-fill, minmax(13.5em, 1fr));
+  padding: var(--space-medium);
+}
+
+/* App entries — the site's real destinations, as launcher rows. */
+.app {
+  align-items: center;
+  border-radius: 0.5em;
+  color: var(--color-terminal-white);
+  display: flex;
+  gap: 1ch;
+  padding: 0.7em 0.9em;
+  text-decoration: none;
+  transition: background var(--transition), transform var(--transition-bounce), color var(--transition);
+}
+.app svg { color: var(--color-terminal-cyan); height: 1.5em; width: 1.5em; flex: none; transition: color var(--transition); }
+.app b { font-weight: 500; }
+.app small {
+  color: rgba(var(--rgb-terminal-white), 0.45);
+  display: block;
+  font-size: 0.82em;
+  font-weight: 300;
+}
+.app__name { display: grid; line-height: 1.2; min-width: 0; }
+.app__key {
+  color: rgba(var(--rgb-terminal-white), 0.35);
+  font-size: var(--font-size-small);
+  margin-left: auto;
+}
+@media (hover: hover) {
+  .app:hover {
+    background: rgba(var(--rgb-terminal-black), 0.45);
+    color: var(--color-white);
+    transform: translateX(0.2em);
+  }
+  .app:hover svg { color: var(--vibe-accent, var(--color-turquoise)); }
+}
+.app[hidden] { display: none; }
+.launcher__empty {
+  color: rgba(var(--rgb-terminal-white), 0.5);
+  font-style: italic;
+  padding: var(--space-large);
+  text-align: center;
+}
+
+
+/* ------------------------------------------------------------- Status bar -- */
+
+.statusbar {
+  align-items: center;
+  background: rgba(var(--rgb-background-night), 0.72);
+  border-top: var(--border-width) solid var(--border-color);
+  color: rgba(var(--rgb-terminal-white), 0.7);
+  display: flex;
+  flex-wrap: wrap;
+  font-size: var(--font-size-small);
+  gap: 0.6em var(--space-large);
+  justify-content: center;
+  padding: var(--space-neutral) var(--win-gap);
+  text-align: center;
+}
+.statusbar p { margin: 0; text-wrap: pretty; }
+.statusbar a { color: var(--color-terminal-cyan); }
+.statusbar__sep { color: rgba(var(--rgb-terminal-white), 0.25); }
+.statusbar .footer__icon { color: var(--color-terminal-cyan); }
+.statusbar .footer__icon strong { color: var(--color-terminal-cyan); }
+
+
+/* ------------------------------------------------------- Section titles -- */
+
+.workspace { display: grid; gap: var(--win-gap); }
+.workspace__head {
+  align-items: baseline;
+  color: var(--color-green);
+  display: flex;
+  gap: 1.5ch;
+  font-size: var(--font-size-small);
+  font-weight: 700;
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+}
+.workspace__head span { color: rgba(var(--rgb-terminal-white), 0.5); font-weight: 300; letter-spacing: var(--letter-spacing-wide); }
+.workspace__head::after { background: var(--border-color); content: ""; flex: 1; height: var(--border-width); align-self: center; }
+
+
+@media (prefers-reduced-motion: reduce) {
+  .prompt__caret { animation: none; }
+}
